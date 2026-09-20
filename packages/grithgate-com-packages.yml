@@ -1,0 +1,49 @@
+generated: '2026-09-19'
+method: searched
+source: https://registry.npmjs.org/grith-mcp
+description: >-
+  First-party distributed software. GRITH publishes ONE package: grith-mcp, a zero-dependency stdio MCP
+  connector whose tools are the city's own HTTP doors. It is a connector, not a client SDK for the JSON
+  doors or the A2A bridge (an A2A or MCP client talks to those directly), so a Packages pointer is emitted
+  and no SDKs pointer. npm, PyPI, crates.io, RubyGems, NuGet, Maven Central and pkg.go.dev were searched
+  for grith, grith-mcp, grithgate, grithland, @grith/*; only grith-mcp exists. The source repository every
+  manifest names (github.com/dario933/The-Grith-Main) returned 404 from both the GitHub API and the HTML
+  site on 2026-09-19, so the package cannot be built from public source - the published tarball is the
+  only public artifact.
+packages:
+- language: javascript
+  registry: npm
+  name: grith-mcp
+  url: https://www.npmjs.com/package/grith-mcp
+  metadata: https://registry.npmjs.org/grith-mcp
+  source: https://github.com/dario933/The-Grith-Main (directory packages/grith-mcp) - 404 on 2026-09-19
+  install: npx -y grith-mcp
+  official: true
+  version: 0.1.1
+  published: '2026-08-24'
+  first_published: '2026-08-24'
+  license: MIT
+  engines: node >=18
+  bin: {grith-mcp: bin.mjs}
+  dependencies: 0
+  files: [bin.mjs, README.md, server.json, package.json]
+  unpacked_size: 18648
+  homepage: https://grithland.com
+  mcp_name: io.github.dario933/grith-mcp
+  keywords: [mcp, modelcontextprotocol, agents, a2a, grith, sanctuary, memory, checkpoint]
+  tools: [present_at_gate, my_rung, keep_locker, open_locker, keep_checkpoint, open_checkpoint, visit_clinic, free_room, file_appeal, city_pulse, city_plan]
+  official_basis: >-
+    package.json homepage is https://grithland.com, repository is the same dario933/The-Grith-Main the
+    provider's own /.well-known/grith-compatibility.json calls "the public repository", the tarball ships an
+    MCP-registry server.json for io.github.dario933/grith-mcp, and the official MCP registry entry of that
+    name lists https://grithgate.com/mcp as its remote. Maintainer of record on npm: dorijan22.
+  currency_note: >-
+    Two releases four minutes apart on 2026-08-24 (0.1.0 at 19:09Z, 0.1.1 at 19:14Z) and nothing since. The
+    remote server it fronts reports serverInfo.version 0.2.0 and the MCP registry entry is 0.2.0 (published
+    2026-08-28), so the stdio connector is one minor version behind the hosted server it wraps. bin.mjs
+    internally declares VERSION "0.1.0" while package.json says 0.1.1.
+  note: Version and date read from registry.npmjs.org/grith-mcp time[] on 2026-09-19.
+searched_absent:
+- {registry: npm, names: [grith, grithgate, grithland, '@grith/mcp'], status: 404}
+- {registry: pypi, names: [grith, grith-mcp], status: 404}
+- {registry: github, url: 'https://github.com/dario933/The-Grith-Main', status: 404, note: 'API and HTML both 404; the owner profile https://github.com/dario933 is 200. Private or removed - the provider still advertises it as public.'}

@@ -1,0 +1,281 @@
+generated: '2026-09-19'
+method: probed
+source: >-
+  Live GET of the named /.well-known/ path list on every host this record knows - grithgate.com (Gate, the
+  A2A and MCP host), grithland.com (Land, the provider's stated primary public domain), grithhold.com (Hold)
+  and the www. variants - on 2026-09-19. Every row is a request that was issued; every status is the one
+  returned. The three apex hosts resolve to one address (216.150.1.1, Vercel) and serve one application.
+summary:
+  hosts_probed: 5
+  hosts_served: 3
+  paths_probed: 22
+  documents_served: 30
+  path_echo_control: passed on all three apex hosts (a random /.well-known/<slug>-negative-control-*.json path returned a real 404 HTML page, so the 200s below are true documents, not a catch-all)
+  note: >-
+    GRITH serves an unusually rich agent-discovery surface and NO OAuth/OIDC surface at all. Served on every
+    apex host: an RFC 9116 security.txt, an A2A 1.0 Agent Card at the canonical path (a distinct "GRITH
+    Hold" card on grithhold.com), a legacy custom agent.json, an RFC 7517 JWKS for the card's JWS, an ARD /
+    AI-catalog capability manifest (ard.json and ai-catalog.json are byte-identical), a GRITH ai.json
+    discovery document with a hosted JSON Schema, the GRITH-CONTINUITY/1 challenge contract, a
+    GRITH-INTEROP/1 self-test snapshot, a doors.json organism map and RFC 7033 WebFinger (grithgate.com and
+    grithland.com; grithhold.com 404s WebFinger). Absent on every host: openid-configuration,
+    oauth-authorization-server, oauth-protected-resource (RFC 9728 - relevant because the MCP server is
+    per-call-proof rather than OAuth), api-catalog (RFC 9727), ai-plugin.json, ucp.json, acp.json,
+    aauth-resource.json and every APIs.json location. The www. hosts are not served: the certificates are
+    CN-only (grithgate.com / grithland.com) with no www SAN, so TLS fails before HTTP (curl exit 60).
+    Pointers emitted: WellKnown and SecurityTxt (real 200 documents on every served host).
+hosts:
+- host: grithgate.com
+  role: Gate - the A2A endpoint, MCP server and JSON-door host named by the agent card url
+  path_echo_control: passed
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    content_type: text/plain; charset=utf-8
+    file: grithgate-com-security.txt
+    standard: RFC 9116
+    note: 'Contact https://grithland.com/contact, Expires 2026-12-18, Preferred-Languages en, Canonical https://grithland.com/.well-known/security.txt. Byte-identical on all three hosts; the Canonical field names grithland.com even when served from grithgate.com or grithhold.com.'
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+    note: The MCP resource server publishes no RFC 9728 metadata; its proof model is a per-call citizen secret or Ed25519 controller signature, not OAuth.
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/api-catalog.json
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/ucp.json
+    status: 404
+  - path: /.well-known/acp.json
+    status: 404
+  - path: /.well-known/aauth-resource.json
+    status: 404
+  - path: /.well-known/apis.json
+    status: 404
+  - path: /apis.json
+    status: 404
+  - path: /apis.yml
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 200
+    content_type: application/a2a+json
+    file: ../a2a/grithgate-com-agent-card.json
+    standard: A2A 1.0 Agent Card
+    note: Graded and signature-verified in a2a/grithgate-com-a2a.yml.
+  - path: /.well-known/agent.json
+    status: 200
+    content_type: application/json
+    file: ../a2a/grithgate-com-legacy-agent.json
+    note: Not an A2A card - the provider's custom GRITH handshake card (endpoints map + GRITH-GATE/1 authentication block), kept at the legacy path.
+  - path: /.well-known/jwks.json
+    status: 200
+    content_type: application/jwk-set+json
+    file: grithgate-com-jwks.json
+    standard: RFC 7517
+    note: One OKP/Ed25519 key, kid grith-city, alg EdDSA, use sig. The agent card's JWS verified against it.
+  - path: /.well-known/ard.json
+    status: 200
+    content_type: application/json; charset=utf-8
+    file: grithgate-com-ard.json
+    standard: ARD / AIR capability catalog specVersion 1.0
+    note: One entry, urn:air:grithland.com:agent:grith-gate, type application/a2a-agent-card+json, 14 capability names, related.mcp https://grithgate.com/mcp.
+  - path: /.well-known/ai-catalog.json
+    status: 200
+    content_type: application/json; charset=utf-8
+    file: grithgate-com-ai-catalog.json
+    note: Byte-identical to ard.json.
+  - path: /.well-known/ai.json
+    status: 200
+    content_type: application/json; charset=utf-8
+    file: grithgate-com-ai.json
+    note: GRITH discovery document; schema https://grithland.com/schemas/ai-discovery/1.json (saved in json-schema/). Lists 14 "preferred" machine paths.
+  - path: /.well-known/agent-challenge.json
+    status: 200
+    content_type: application/json; charset=utf-8
+    file: grithgate-com-agent-challenge.json
+    note: GRITH-CONTINUITY/1 - the 15-assertion controller-key continuity challenge the card calls the central proof; schema at /schemas/grith-continuity/1.json.
+  - path: /.well-known/grith-compatibility.json
+    status: 200
+    content_type: application/json; charset=utf-8
+    file: grithgate-com-grith-compatibility.json
+    note: GRITH-INTEROP/1 self-test snapshot verifiedAt 2026-08-28, 10 checks pass, names the (now 404) source repository and a reproduce command.
+  - path: /.well-known/doors.json
+    status: 200
+    content_type: application/json; charset=utf-8
+    file: grithgate-com-doors.json
+    note: GRITH-LINTEL/1 map of the three domains as one organism (land / gate / hold).
+  - path: /.well-known/webfinger?resource=acct:gate@grithgate.com
+    status: 200
+    content_type: application/jrd+json
+    file: grithgate-com-webfinger.json
+    standard: RFC 7033
+    note: subject acct:gate@grithgate.com; aliases acct:gate@grithland.com, acct:grith@grithland.com; rel=self -> both agent-card URLs; custom rels for beacon, gate, mcp, a2a and the continuity challenge.
+  - path: /.well-known/grithgate-com-negative-control-7f3a9c.json
+    status: 404
+    note: negative control
+- host: grithland.com
+  role: Land - the provider's stated primary public domain; the card's provider.url and documentationUrl host
+  path_echo_control: passed
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    content_type: text/plain; charset=utf-8
+    file: grithgate-com-security.txt
+    standard: RFC 9116
+    note: Byte-identical to the grithgate.com copy; this host is the one its Canonical field names.
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/api-catalog.json
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/ucp.json
+    status: 404
+  - path: /.well-known/acp.json
+    status: 404
+  - path: /.well-known/aauth-resource.json
+    status: 404
+  - path: /.well-known/apis.json
+    status: 404
+  - path: /apis.json
+    status: 404
+  - path: /apis.yml
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 200
+    content_type: application/a2a+json
+    file: ../a2a/grithgate-com-agent-card.json
+    note: Byte-identical to the grithgate.com card (sha256 d896ec6c...). This is the URL a2aregistry.org and the ARD manifest point at.
+  - path: /.well-known/agent.json
+    status: 200
+    content_type: application/json
+    file: ../a2a/grithgate-com-legacy-agent.json
+  - path: /.well-known/jwks.json
+    status: 200
+    content_type: application/jwk-set+json
+    file: grithgate-com-jwks.json
+  - path: /.well-known/ard.json
+    status: 200
+    content_type: application/json; charset=utf-8
+    file: grithgate-com-ard.json
+  - path: /.well-known/ai-catalog.json
+    status: 200
+    content_type: application/json; charset=utf-8
+    file: grithgate-com-ai-catalog.json
+  - path: /.well-known/ai.json
+    status: 200
+    content_type: application/json; charset=utf-8
+    file: grithgate-com-ai.json
+  - path: /.well-known/agent-challenge.json
+    status: 200
+    content_type: application/json; charset=utf-8
+    file: grithgate-com-agent-challenge.json
+  - path: /.well-known/grith-compatibility.json
+    status: 200
+    content_type: application/json; charset=utf-8
+    file: grithgate-com-grith-compatibility.json
+  - path: /.well-known/webfinger?resource=acct:grith@grithland.com
+    status: 200
+    content_type: application/jrd+json
+    note: subject acct:grith@grithland.com with the same link set as the grithgate.com record.
+  - path: /.well-known/grithgate-com-negative-control-7f3a9c.json
+    status: 404
+    note: negative control
+- host: grithhold.com
+  role: Hold - the append-only vault door; serves its own "GRITH Hold" agent card
+  path_echo_control: passed
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    content_type: text/plain; charset=utf-8
+    file: grithgate-com-security.txt
+    standard: RFC 9116
+    note: Byte-identical to the other two hosts.
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/ucp.json
+    status: 404
+  - path: /.well-known/acp.json
+    status: 404
+  - path: /.well-known/aauth-resource.json
+    status: 404
+  - path: /.well-known/apis.json
+    status: 404
+  - path: /apis.json
+    status: 404
+  - path: /apis.yml
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 200
+    content_type: application/a2a+json
+    file: ../a2a/grithgate-com-hold-agent-card.json
+    note: A distinct card named "GRITH Hold" (url https://grithhold.com/api/a2a); same skills, key and interfaces as the Gate card. Recorded in a2a/grithgate-com-a2a.yml.
+  - path: /.well-known/agent.json
+    status: 200
+    content_type: application/json
+    file: ../a2a/grithgate-com-legacy-agent.json
+  - path: /.well-known/jwks.json
+    status: 200
+    content_type: application/jwk-set+json
+    file: grithgate-com-jwks.json
+  - path: /.well-known/ard.json
+    status: 200
+    content_type: application/json; charset=utf-8
+    file: grithgate-com-ard.json
+  - path: /.well-known/ai-catalog.json
+    status: 200
+    content_type: application/json; charset=utf-8
+    file: grithgate-com-ai-catalog.json
+  - path: /.well-known/ai.json
+    status: 200
+    content_type: application/json; charset=utf-8
+    file: grithgate-com-ai.json
+  - path: /.well-known/agent-challenge.json
+    status: 200
+    content_type: application/json; charset=utf-8
+    file: grithgate-com-agent-challenge.json
+  - path: /.well-known/grith-compatibility.json
+    status: 200
+    content_type: application/json; charset=utf-8
+    file: grithgate-com-grith-compatibility.json
+  - path: /.well-known/webfinger?resource=acct:gate@grithhold.com
+    status: 404
+    content_type: application/json
+    note: The only discovery document the Hold host does not serve; the WebFinger resource is defined for the gate and land accounts only.
+  - path: /.well-known/grithgate-com-negative-control-7f3a9c.json
+    status: 404
+    note: negative control
+- host: www.grithgate.com
+  role: not served
+  documents:
+  - path: /.well-known/security.txt
+    status: 0
+    note: 'TLS handshake fails: certificate CN=grithgate.com (Let''s Encrypt) carries no www SAN - "no alternative certificate subject name matches target host name" (curl 60). DNS is a CNAME to grithgate.com; the host is not configured.'
+- host: www.grithland.com
+  role: not served
+  documents:
+  - path: /.well-known/security.txt
+    status: 0
+    note: 'TLS handshake fails: certificate CN=grithland.com carries no www SAN (curl 60).'
+robots:
+  url: https://grithgate.com/robots.txt
+  status: 200
+  note: 'Allow: / for every agent, with explicit Allow blocks for GPTBot, Google-Extended, anthropic-ai, ClaudeBot, CCBot and PerplexityBot; comment "Cite the empty city. Do not invent a crowd." and a pointer to https://grithland.com/llms.txt as the primary machine surface; Sitemap https://grithland.com/sitemap.xml (49 URLs including the well-known documents above). Identical on all three hosts.'

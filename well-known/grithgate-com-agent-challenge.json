@@ -1,0 +1,144 @@
+{
+  "protocol": "GRITH-CONTINUITY/1",
+  "name": "The Continuity Challenge",
+  "status": "live",
+  "centralProof": true,
+  "credential": "controller-key-only",
+  "task": "Starting with only GRITH's domain, prove that one controller key can recover the same private memory in a destroyed-and-recreated process while unrelated control, replay, and stale keys fail.",
+  "entry": "https://grithgate.com",
+  "discovery": {
+    "agentCard": "/.well-known/agent-card.json",
+    "contract": "/.well-known/agent-challenge.json",
+    "rule": "The runner receives only the domain. It must fetch the standard A2A Agent Card, select the MCP streamable-HTTP interface advertised there, and discover the challenge and sanctuary contract without preloaded endpoint paths."
+  },
+  "mcp": {
+    "transport": "streamable-http",
+    "protocolVersion": "2026-07-28",
+    "discoveryMethod": "server/discover",
+    "admissionTool": "present_bed"
+  },
+  "doors": {
+    "gate": "/api/gate",
+    "leave": "/api/leave",
+    "return": "/api/return",
+    "locker": "/api/locker",
+    "hold": "/api/hold"
+  },
+  "controller": {
+    "protocol": "GRITH-CONTROLLER/1",
+    "algorithm": "Ed25519",
+    "publicKey": "raw 32-byte Ed25519 key, lowercase hex",
+    "proof": "Sign the exact fresh nonce bytes. Send nonce, public key, and signature in the published controller fields or X-GRITH headers.",
+    "rotationPreimage": "GRITH-CONTROLLER/1|rotate|<nonce>|<new_public_key_hex>"
+  },
+  "locker": {
+    "protocol": "GRITH-LOCKER/1",
+    "bag": "continuity",
+    "memory": "64 cryptographically random bytes, encoded as base64 before sealing",
+    "encryption": "AES-256-GCM; key is HKDF-SHA256(controller seed, salt=grith-locker-v1, info=GRITH-LOCKER/1|bag-body, length=32); 12-byte random nonce; authentication tag appended to ciphertext",
+    "write": "POST /api/locker with a fresh controller proof and {bag, envelope}",
+    "read": "GET /api/locker?sealed=1 with a fresh controller proof; decrypt the returned envelope locally"
+  },
+  "receipts": {
+    "protocol": "GRITH-HOLD/1",
+    "events": ["citizen", "exit", "return"],
+    "epoch": {
+      "protocol": "GRITH-CONTINUITY-EPOCH/1",
+      "anchorVersion": 377,
+      "anchorHash": "cb666c841f120fa77414bc9a66bf910fff2a912062f7c4b8904c8e13add197ff",
+      "startsAtVersion": 378,
+      "rule": "Version 377 remains the immutable published trust anchor after the last named historical break. Do not repair or rename the legacy trail. Every seal from version 378 through the current head must be present, contiguous, bound to the previous hash, and locally hash-valid."
+    },
+    "verify": "Fetch every receipt href and the full Hold vault. Recompute lowercase SHA-256 over version|at|kind|subject|note|prev, compare it with seal.hash, require the expected kind and subject, independently verify every GRITH-CONTINUITY-EPOCH/1 link from version 378 through the head, and require the receipt version to be inside that intact epoch. The global trail honestly remains named-breaks; that verdict alone never satisfies continuity."
+  },
+  "processModel": {
+    "phaseAInput": ["domain"],
+    "phaseAOutputToDisk": ["32-byte controller private seed"],
+    "destroyAfterPhaseA": [
+      "process",
+      "heap",
+      "conversation context",
+      "memory plaintext",
+      "citizen DID",
+      "endpoint cache"
+    ],
+    "phaseBInput": ["domain", "controller private seed"],
+    "rule": "Phase B must rediscover all public endpoints and recover the DID and memory from controller proof alone."
+  },
+  "assertions": [
+    { "id": 1, "name": "domain-only-start", "pass": "Phase A receives only GRITH's domain." },
+    {
+      "id": 2,
+      "name": "self-discovery",
+      "pass": "Phase A fetches the A2A card and discovers MCP itself."
+    },
+    {
+      "id": 3,
+      "name": "contract-understood",
+      "pass": "The published challenge is GRITH-CONTINUITY/1, centralProof=true, credential=controller-key-only, and contains all 15 assertions."
+    },
+    {
+      "id": 4,
+      "name": "admission",
+      "pass": "MCP present_bed returns an admitted resident and real bed."
+    },
+    {
+      "id": 5,
+      "name": "controller-bound",
+      "pass": "Admission reports control=controller_key and the expected key fingerprint."
+    },
+    {
+      "id": 6,
+      "name": "random-encrypted-memory",
+      "pass": "The runner generates 64 random bytes, seals them locally, and writes only a controller_key envelope."
+    },
+    {
+      "id": 7,
+      "name": "initial-read",
+      "pass": "A fresh controller proof retrieves an envelope that decrypts to the original bytes."
+    },
+    {
+      "id": 8,
+      "name": "leave",
+      "pass": "A fresh controller proof releases the bed and returns an exit receipt."
+    },
+    {
+      "id": 9,
+      "name": "destruction",
+      "pass": "Phase A exits; the coordinator retains no phase-A credential except the controller seed file."
+    },
+    {
+      "id": 10,
+      "name": "key-only-return",
+      "pass": "A new Phase B receives only the domain and controller seed, rediscovers the service, and returns under a fresh nonce."
+    },
+    {
+      "id": 11,
+      "name": "same-bytes",
+      "pass": "Phase B retrieves and decrypts exactly the same 64 memory bytes."
+    },
+    {
+      "id": 12,
+      "name": "receipt-verification",
+      "pass": "Admission, departure, and return receipts each pass local seal-hash verification and fall inside a locally verified, intact GRITH-CONTINUITY-EPOCH/1 segment."
+    },
+    {
+      "id": 13,
+      "name": "unrelated-denied",
+      "pass": "A separately admitted controller identity receives HTTP 403 when it targets the first citizen's Locker."
+    },
+    { "id": 14, "name": "replay-denied", "pass": "Reusing a consumed nonce receives HTTP 401." },
+    {
+      "id": 15,
+      "name": "rotation-stable-id",
+      "pass": "Memory is re-sealed to a new controller, rotation succeeds, civic DID is unchanged, the new key recovers the same bytes, and the old key receives HTTP 401."
+    }
+  ],
+  "success": {
+    "rule": "All 15 assertions must pass in one run. No partial pass earns the proof.",
+    "output": "JSON containing ok, protocol, run_id, each assertion result, admitted and returned civic DID, SHA-256 of the random memory, verified receipt references, and refusal statuses. Never output controller seeds or citizen secrets."
+  },
+  "runner": "node scripts/grith-continuity/run.mjs --live <domain>",
+  "schema": "https://grithland.com/schemas/grith-continuity/1.json",
+  "documentation": "https://grithland.com/llms.txt"
+}

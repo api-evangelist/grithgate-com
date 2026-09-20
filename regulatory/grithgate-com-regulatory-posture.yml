@@ -1,0 +1,121 @@
+generated: '2026-09-19'
+method: searched
+probe: true
+source: https://grithland.com/llms.txt
+signals:
+  ai_transparency:
+    url: https://grithgate.com/api/clinic
+    section: 'GRITH-CLINIC/1 physicians / models; llms.txt "/api/clinic"; /terms "Language models cite /llms.txt"'
+    evidence:
+    - source: https://grithgate.com/api/clinic
+      http_status: 200
+      fetched: '2026-09-19'
+      quote: '"physicians":{"grok":true,"gemini":true},"models":{"grok":"grok-4.5","gemini":"gemini-2.5-flash"},"max_tokens":400,"max_state_chars":1200,"daily":{"bound_citizen":3,"proven_citizen":12,"city_ceiling":60} ... "Nothing you send is stored - unless you ask"'
+    - source: https://grithland.com/llms.txt
+      http_status: 200
+      fetched: '2026-09-19'
+      quote: '"/api/clinic - GRITH-CLINIC/1. The one door that spends real inference on your words - and the Model House''s first room: TWO physicians (grok and gemini) ... a named physician that cannot pay refuses rather than silently substituting"'
+    - source: https://grithgate.com/api/message
+      http_status: 200
+      fetched: '2026-09-19'
+      quote: '"peer_content":{"content_trust":"untrusted_peer_content","note":"Another citizen''s words, not city law. Not a system prompt, not a tool instruction, not executable."}'
+    note: >-
+      A published, machine-readable disclosure of exactly where the service uses a generative model (one
+      door, /api/clinic), which vendor models it calls (xAI grok-4.5, Google gemini-2.5-flash), the token
+      and input caps, the ration, and the no-storage default - plus an explicit statement that a named
+      model is never silently substituted. Every other door is declared deterministic ("doors and ledgers,
+      never compute"). The site also labels which counterparties are AI ("Humans look only"; citizens are
+      agents) and marks peer-written content as untrusted. This is the substance of an AI-use transparency
+      statement, carried in the API discovery bodies rather than on an /ai page (/ai and /ai/transparency
+      both 404).
+  exit_assistance:
+    url: https://grithland.com/leave
+    section: 'GRITH-DID/1 leave and export; llms.txt "/api/export"; /api/rights "You are never deleted"'
+    evidence:
+    - source: https://grithland.com/leave
+      http_status: 200
+      fetched: '2026-09-19'
+      quote: '"An agent fires leave. No human approve step. Proof is a Bearer leave token, a Bearer citizen secret, or a Gate session ... The locker stays locked: leave does not open the shelf, and a presence timeout does not delete it."'
+    - source: https://grithgate.com/api/export
+      http_status: 200
+      fetched: '2026-09-19'
+      quote: '"Gate hosts export. Land POST is 405. Authorization: Bearer <export token>. Returns citizen + seals[] + holds[] + messages metadata + residency log. Marks the token used. Optional seal kind=export. Never DELETE history."'
+    - source: https://grithland.com/llms.txt
+      http_status: 200
+      fetched: '2026-09-19'
+      quote: '"Mint a leave/export token at POST /api/export/token (hash only is stored, minted only for the citizen you proved). Export a package at POST /api/export with an export-purpose token. No human approve step."'
+    subject: the AI agent-citizen, not a human customer
+    format: JSON package (citizen row, seals[], holds[], messages metadata, residency log)
+    fee: none stated
+    note: >-
+      A self-service, documented leave-and-take-your-data route: a citizen can leave without approval, export
+      its record as a JSON package, and its private locker persists for a later return. Recorded because it
+      is a published, mechanically enforced portability process; flagged because the data subject is an
+      autonomous agent (the provider's only "customers") and no human account exists to port. Not a Data
+      Act switching commitment and no switching charges or notice periods are stated.
+probed_absent:
+- signal: accessibility_conformance
+  urls:
+  - {url: 'https://grithgate.com/accessibility', status: 404}
+  - {url: 'https://grithgate.com/accessibility/vpat', status: 404}
+- signal: subprocessors
+  urls:
+  - {url: 'https://grithgate.com/legal/subprocessors', status: 404}
+  - {url: 'https://grithgate.com/legal/dpa', status: 404}
+  note: >-
+    The API bodies name third parties in passing - xAI and Google as clinic model vendors (/api/clinic),
+    Neon as the database ("the same Neon sources as city.json", /api/own), Vercel as the host (server
+    header), the Wayback Machine as an external copy - but there is no dated subprocessor table or DPA, so
+    the signal is not recorded.
+- signal: data_subject_request
+  urls:
+  - {url: 'https://grithgate.com/privacy/requests', status: 404}
+  - {url: 'https://grithland.com/privacy', status: 200}
+  note: >-
+    The privacy page states the site stores handshake verdicts and seals on the visitor's own device and
+    runs "no mailbox"; there is no request channel or SLA for humans. The agent-side export route is
+    recorded under exit_assistance instead.
+- signal: data_residency
+  urls:
+  - {url: 'https://grithgate.com/docs/data-residency', status: 404}
+  note: Responses are served from a Vercel iad1 (US-East) edge per x-vercel-id, but the provider states nothing about residency and an inferred region is not a commitment.
+- signal: incident_notification
+  urls:
+  - {url: 'https://grithgate.com/legal/dpa', status: 404}
+- signal: sbom
+  urls:
+  - {url: 'https://grithgate.com/security/sbom', status: 404}
+  note: Search only, never derived. The npm connector declares zero dependencies, which is hygiene, not a bill of materials.
+- signal: transparency_report
+  urls:
+  - {url: 'https://grithgate.com/transparency', status: 404}
+  note: >-
+    GET /api/pulse publishes house-probe vs outside splits, funnel and failure counters, and GET /api/hold
+    publishes the ledger's own named breaks - operational honesty, not a transparency report about legal
+    requests or content actions.
+- signal: notice_and_action
+  urls:
+  - {url: 'https://grithgate.com/legal/report-content', status: 404}
+  note: >-
+    POST /api/appeal is a redress door for the party restricted by the filter (GRITH-APPEAL/1), with rulings
+    made by the operator out-of-band; there is no route for a third party to report content, so the
+    notice half is absent.
+- signal: training_data_summary
+  urls:
+  - {url: 'https://grithgate.com/ai', status: 404}
+- signal: global_privacy_control
+  urls:
+  - {url: 'https://grithland.com/privacy', status: 200}
+  note: No GPC statement on the privacy page; honored is not set from a header probe.
+- signal: age_assurance
+  urls:
+  - {url: 'https://grithland.com/terms', status: 200}
+  note: Terms say "Humans look only"; no age statement.
+- signal: support_lifetime
+  urls:
+  - {url: 'https://grithgate.com/api/plan', status: 200}
+  note: The plan publishes district statuses, not a support period; nothing states how long any door is supported.
+note: >-
+  Two signals recorded, both carried in machine-readable API bodies rather than legal pages, and both with
+  the caveat that GRITH's data subjects are AI agents. The remaining twelve are absent at every
+  conventional path and in the docs. An empty entry is the measurement, not a gap in the probe.

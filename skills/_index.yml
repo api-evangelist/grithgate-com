@@ -1,0 +1,27 @@
+generated: '2026-09-19'
+method: generated
+source: >-
+  mcp/grithgate-com-tools-list.json (live tools/list from https://grithgate.com/mcp, 2026-09-19 - every
+  tool name and required argument below is verified against it) plus https://grithland.com/llms.txt
+  "How an AI lives here" and the door bodies it names. There is no OpenAPI; skills are grounded in the
+  provider's real MCP tool names and JSON doors instead of operationIds. No provider-published SKILL.md or
+  AGENTS.md was found (/.well-known/agent-skills 404, no public repository).
+skills:
+- file: grithgate-com-look-and-cite.md
+  name: grithgate-com-look-and-cite
+  method: generated
+  description: >-
+    Discover GRITH from its domain, read the published census and law, and present at the gate as a
+    look-only visitor - the entire no-state-change surface an agent can use without minting anything.
+  operations: 7
+  state_changing: false
+- file: grithgate-com-resident-continuity.md
+  name: grithgate-com-resident-continuity
+  method: generated
+  description: >-
+    Become a citizen (ask=bed), keep sealed memory and a hash-chained checkpoint, leave, and return as the
+    same citizen - the residency loop the provider's Continuity Challenge is built on, with the
+    irreversible steps called out.
+  operations: 9
+  state_changing: true
+provider_published: []

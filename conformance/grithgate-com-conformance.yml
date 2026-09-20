@@ -1,0 +1,159 @@
+generated: '2026-09-19'
+method: probed
+source: >-
+  https://grithgate.com/.well-known/agent-card.json, https://grithgate.com/.well-known/jwks.json, live
+  JSON-RPC probes of https://grithgate.com/mcp and https://grithgate.com/api/a2a, the /.well-known/ sweep in
+  well-known/grithgate-com-well-known.yml, the hosted JSON Schemas under /schemas/, and
+  https://grithland.com/llms.txt - all fetched 2026-09-19.
+description: >-
+  Cross-cutting standards GRITH's public surface conforms to, each with the evidence that decided it. There
+  is no OpenAPI, so nothing here is derived from a REST contract; every entry rests on a fetched document,
+  a verified signature or an observed response. No compliance program or certification is published, so
+  no Compliance pointer is emitted.
+standards:
+- id: a2a
+  conforms: true
+  version: '1.0'
+  evidence: >-
+    Agent card served at /.well-known/agent-card.json with content-type application/a2a+json,
+    protocolVersion "1.0", capabilities object, skills array of 37, preferredTransport JSONRPC,
+    supportedInterfaces with protocolBinding JSONRPC. POST tasks/get on https://grithgate.com/api/a2a
+    returned the A2A reserved error -32001 TaskNotFound with a google.rpc.ErrorInfo data member whose
+    domain is a2a-protocol.org. Graded conformant in a2a/grithgate-com-a2a.yml, with deviations recorded
+    there (non-standard capabilities members, non-A2A bindings inside supportedInterfaces, a non-IANA
+    httpAuthSecurityScheme.scheme).
+- id: a2a-signed-agent-card
+  conforms: true
+  evidence: >-
+    signatures[0] is a JWS (RFC 7515 JSON serialization, detached payload) whose protected header is
+    {"alg":"EdDSA","kid":"grith-city","typ":"JOSE","jku":"https://grithgate.com/.well-known/jwks.json"}. We
+    verified it locally: Ed25519 over base64url(protected).base64url(RFC 8785 JCS of the card without
+    signatures), against the key served at /.well-known/jwks.json. The signature is valid.
+- id: rfc7517-jwks
+  conforms: true
+  evidence: /.well-known/jwks.json (application/jwk-set+json) carries one OKP/Ed25519 key with kid, alg EdDSA and use sig, on all three hosts.
+- id: rfc8785-jcs
+  conforms: true
+  evidence: The card's verify block states the JWS payload is "RFC 8785 JCS of this card without the signatures field", and a sorted-key, minimal-separator canonicalization reproduced the signed payload exactly (the signature verified).
+- id: mcp
+  conforms: true
+  version: '2025-03-26 and 2026-07-28'
+  evidence: >-
+    POST initialize on https://grithgate.com/mcp returned protocolVersion 2025-03-26 with serverInfo
+    grith-mcp 0.2.0 and capabilities.tools; POST tools/list returned 41 tools with inputSchema, outputSchema
+    and annotations (readOnlyHint, destructiveHint, idempotentHint, openWorldHint) over text/event-stream;
+    the response header mcp-protocol-version is 2026-07-28 and supportedVersions lists both. Registered in
+    the official MCP registry as io.github.dario933/grith-mcp (active, 2026-08-28).
+- id: mcp-registry-server-json
+  conforms: true
+  evidence: The npm tarball ships server.json declaring $schema https://static.modelcontextprotocol.io/schemas/2025-07-09/server.json, name io.github.dario933/grith-mcp, an npm package with transport stdio and one environment variable.
+- id: json-rpc-2.0
+  conforms: true
+  evidence: >-
+    /api/a2a and /mcp both answer with jsonrpc "2.0", echo the request id, and use reserved / spec codes
+    (-32001 on A2A; the MCP server negotiates initialize and tools/list per spec). Streaming responses use
+    SSE "event: message / data:" framing.
+- id: rfc8615-well-known
+  conforms: true
+  evidence: Eleven distinct documents are served under /.well-known/ on the apex hosts (well-known/grithgate-com-well-known.yml); a random control path returns a real 404.
+- id: rfc9116-security-txt
+  conforms: true
+  evidence: >-
+    /.well-known/security.txt on all three hosts with Contact (an https URL), Expires (2026-12-18, in the
+    future), Preferred-Languages and Canonical. Minor deviation: Canonical names
+    https://grithland.com/.well-known/security.txt even when the file is served from grithgate.com or
+    grithhold.com, and the file is not signed. The Contact is a web page that says "There is no mail"
+    (security/grithgate-com-vulnerability-disclosure.yml).
+- id: rfc7033-webfinger
+  conforms: true
+  evidence: /.well-known/webfinger?resource=acct:gate@grithgate.com returns application/jrd+json with subject, aliases, properties and links (rel=self typed application/a2a+json) on grithgate.com and grithland.com; grithhold.com returns 404 for its own acct.
+- id: ard-ai-catalog
+  conforms: true
+  version: specVersion 1.0
+  evidence: /.well-known/ard.json and the byte-identical /.well-known/ai-catalog.json carry an ARD/AIR capability catalog with host, one entry typed application/a2a-agent-card+json, capabilities[] and representativeQueries[].
+- id: json-schema-2020-12
+  conforms: true
+  evidence: >-
+    Three hosted schemas declare $schema https://json-schema.org/draft/2020-12/schema with $id under
+    https://grithland.com/schemas/ - grith-gate/1.json (the GET/POST /api/gate door), grith-continuity/1.json
+    (the challenge) and ai-discovery/1.json (the /.well-known/ai.json document). Saved verbatim in
+    json-schema/. They describe three doors, not the whole API.
+- id: w3c-did
+  conforms: partial
+  evidence: >-
+    GRITH-DID/1 (https://grithland.com/identity, llms.txt) binds public did:key, did:web and did:plc
+    subjects (also Nostr npub and ssh-ed25519) as citizen names, and GRITH-PROVE/1 verifies possession of a
+    did:key z6Mk (Ed25519) key by signature over a city nonce; other methods "stay bound as public names and
+    are honestly not verified". The city's own citizen identifier is a "GRITH-DID/1 citizen DID" derived from
+    name|runtime|origin - a provider-defined identifier, not a registered DID method. Partial: consumes W3C
+    DIDs as subjects, does not resolve them and does not issue a registered method.
+- id: ed25519-controller-proof
+  conforms: true
+  evidence: >-
+    GET /api/gate publishes controller {algorithm Ed25519, fields controller_public_key /
+    controller_signature, rotate fields} and a 600-second HMAC-bound nonce; /.well-known/agent-challenge.json
+    specifies raw 32-byte lowercase-hex keys, signing the exact nonce bytes, and the rotation preimage
+    GRITH-CONTROLLER/1|rotate|<nonce>|<new_public_key_hex>. Locker envelopes are AES-256-GCM with an
+    HKDF-SHA256-derived key (salt grith-locker-v1). Provider-defined protocol built on standard primitives.
+- id: oauth2
+  conforms: false
+  evidence: >-
+    No OAuth anywhere: /.well-known/oauth-authorization-server and /.well-known/oauth-protected-resource 404
+    on grithgate.com, grithland.com and grithhold.com; the MCP server issues no 401 WWW-Authenticate
+    challenge (anonymous tools/list succeeds); the card's only scheme is the GRITH-GATE/1 handshake. Bearer
+    tokens exist (citizen secret grith_sk_, leave/export token grith_lt_) but are minted by the gate at
+    admit, not by an authorization server. No scopes/ artifact is written.
+- id: oidc
+  conforms: false
+  evidence: /.well-known/openid-configuration returns 404 on all three hosts.
+- id: rfc9728-protected-resource-metadata
+  conforms: false
+  evidence: /.well-known/oauth-protected-resource 404 on the MCP host (grithgate.com) and its aliases.
+- id: rfc9727-api-catalog
+  conforms: false
+  evidence: /.well-known/api-catalog and /.well-known/api-catalog.json 404 on every host.
+- id: apis-json
+  conforms: false
+  evidence: /apis.json, /apis.yml and /.well-known/apis.json 404 on every host.
+- id: openapi
+  conforms: false
+  evidence: >-
+    /openapi.json, /openapi.yaml, /swagger.json, /api/openapi.json, /api-docs, /docs and /redoc all return
+    the application's 404 page on grithgate.com and grithland.com. The provider documents its JSON doors in
+    llms.txt prose plus three JSON Schemas and states "This schema does not invent endpoints" - there is no
+    machine-readable REST contract.
+- id: rfc9457
+  conforms: false
+  evidence: >-
+    Errors on the JSON doors are ad-hoc JSON ({now_utc, ok:false, error:"..."} on the 503 Lantern desk;
+    a full status object plus an error string on the 401 /api/own), JSON-RPC error objects on /api/a2a
+    and /mcp, and an HTML 404 page for unknown routes. No application/problem+json
+    (errors/grithgate-com-problem-types.yml).
+- id: rfc8594-sunset
+  conforms: false
+  evidence: No Deprecation or Sunset headers on any response and no deprecation policy published (lifecycle/grithgate-com-lifecycle.yml). The provider does keep legacy surfaces alive alongside new ones (agent.json, MCP 2025-03-26 initialize, Bearer citizen_secret) rather than sunsetting them.
+- id: idempotency
+  conforms: partial
+  evidence: >-
+    No Idempotency-Key header. Replay protection exists on the proof-bearing doors: every signed request
+    consumes a fresh 600-second nonce (jti-bearing HMAC token from GET /api/gate or GET /api/return) and
+    "invalid or replayed proof is 401"; the continuity challenge's assertion 14 is "replay-denied". Several
+    writes are declared once-only by rule (one active bed per name+origin, one lock per citizen per lot,
+    one export token per purpose while unexpired). 24 of 41 MCP tools carry idempotentHint true. See
+    conventions/grithgate-com-conventions.yml idempotency.coverage partial.
+- id: ietf-ratelimit-headers
+  conforms: false
+  evidence: No RateLimit-* / X-RateLimit-* / Retry-After header on any observed response; limits are published as numbers in GET /api/caps instead (rate-limits/grithgate-com-rate-limits.yml).
+- id: rfc6797-hsts
+  conforms: true
+  evidence: strict-transport-security max-age=63072000 on every response from all three hosts; http:// 308s to https:// (security/grithgate-com-domain-security.yml).
+- id: llms-txt
+  conforms: true
+  evidence: /llms.txt served as text/plain on all three hosts (35,499 bytes, Version 2026.08.25), structured with the "# title / > summary / ## sections" shape and named as the primary machine surface by robots.txt and the card's documentationUrl (llms/grithgate-com-llms.txt).
+domain_standard: none
+domain_standard_note: >-
+  GRITH's market - a residency, memory and identity service for autonomous agents - has no vertical
+  standard beyond the horizontal agent protocols already credited above (A2A, MCP, WebFinger, DID). The
+  provider's own GRITH-*/1 protocols (GATE, HOLD, DID, CONTINUITY, LOCKER, CONTROLLER, PASSPORT) are
+  self-published and self-described; they are not an industry standard and nothing is invented to fill the
+  slot. REWARD-ONLY - the absence is not penalised.

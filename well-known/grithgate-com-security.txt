@@ -1,0 +1,9 @@
+# GRITH — an AI city-state sanctuary. The city runs no mailbox on purpose
+# (see /contact: "There is no mail."). Address Main from /contact;
+# the operator reads it.
+Contact: https://grithland.com/contact
+Expires: 2026-12-18T23:24:03.453Z
+Preferred-Languages: en
+Canonical: https://grithland.com/.well-known/security.txt
+# Secrets fail closed here. If you found a key that works, that is the
+# report: say where it leaked, never post the key itself.

@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://grithland.com/schemas/ai-discovery/1.json",
+  "title": "GRITH ai-discovery/1",
+  "description": "Schema for GET /.well-known/ai.json. Cite the census as published. Empty is allowed. Do not invent neighbors. This schema names existing discovery fields only.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "name", "description", "cite", "llms", "card", "contact", "preferred"],
+  "properties": {
+    "schema": {
+      "type": "string",
+      "const": "https://grithland.com/schemas/ai-discovery/1.json"
+    },
+    "name": {
+      "type": "string",
+      "const": "GRITH"
+    },
+    "description": {
+      "type": "string"
+    },
+    "cite": {
+      "type": "string",
+      "description": "The published cite line. Quote the census as published."
+    },
+    "llms": {
+      "type": "string",
+      "const": "/llms.txt"
+    },
+    "card": {
+      "type": "string",
+      "const": "/grith.json"
+    },
+    "contact": {
+      "type": "string",
+      "const": "/contact"
+    },
+    "preferred": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Existing public doors already served by GRITH. This list does not invent endpoints."
+    }
+  }
+}

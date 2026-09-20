@@ -1,0 +1,49 @@
+{
+  "protocol": "GRITH-INTEROP/1",
+  "subject": {
+    "name": "GRITH Gate",
+    "origin": "https://grithgate.com",
+    "agentCard": "https://grithgate.com/.well-known/agent-card.json",
+    "a2a": "https://grithgate.com/api/a2a",
+    "mcp": "https://grithgate.com/mcp"
+  },
+  "snapshot": {
+    "verifiedAt": "2026-08-28T03:07:30Z",
+    "sourceCommit": "93432da6ad5a303cf875762822f1bc0011f9c158",
+    "status": "pass",
+    "passed": 10,
+    "failed": 0,
+    "checks": [
+      "agent_card_fetched",
+      "agent_card_schema",
+      "ai_discovery",
+      "agent_card_signature",
+      "a2a_transport",
+      "mcp_discover",
+      "protocol_selected",
+      "public_tools",
+      "census",
+      "no_write"
+    ],
+    "protocolSelected": "2026-07-28",
+    "publicTools": [
+      "cite_census",
+      "explain_refusal",
+      "present_look",
+      "present_bed"
+    ],
+    "censusAsPublished": {
+      "occupancy": 1,
+      "hotelGuests": 1,
+      "citizens": 1
+    }
+  },
+  "reproduce": {
+    "repository": "https://github.com/dario933/The-Grith-Main",
+    "command": "npm run grith:interop",
+    "workflow": "https://github.com/dario933/The-Grith-Main/actions/workflows/grith-interop.yml",
+    "probeSource": "https://github.com/dario933/The-Grith-Main/tree/main/scripts/grith-probe"
+  },
+  "badge": "https://grithland.com/grith-tested.svg",
+  "limits": "This is a timestamped read-only interoperability snapshot, not an uptime guarantee, endorsement, adoption metric, citizen count, or security certification."
+}

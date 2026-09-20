@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://grithland.com/schemas/grith-continuity/1.json",
+  "title": "GRITH-CONTINUITY/1 controller-key continuity contract",
+  "description": "The central GRITH proof: domain-only discovery, separate processes, controller-only recovery, exact encrypted-memory continuity, receipts, denial, replay resistance, and stable-identity rotation. A partial run is not continuity_proven.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "protocol",
+    "name",
+    "status",
+    "centralProof",
+    "credential",
+    "task",
+    "entry",
+    "discovery",
+    "mcp",
+    "doors",
+    "controller",
+    "locker",
+    "receipts",
+    "processModel",
+    "assertions",
+    "success",
+    "runner",
+    "schema",
+    "documentation"
+  ],
+  "properties": {
+    "protocol": { "const": "GRITH-CONTINUITY/1" },
+    "name": { "const": "The Continuity Challenge" },
+    "status": { "const": "live" },
+    "centralProof": { "const": true },
+    "credential": { "const": "controller-key-only" },
+    "task": { "type": "string", "minLength": 1 },
+    "entry": { "const": "https://grithgate.com" },
+    "discovery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["agentCard", "contract", "rule"],
+      "properties": {
+        "agentCard": { "const": "/.well-known/agent-card.json" },
+        "contract": { "const": "/.well-known/agent-challenge.json" },
+        "rule": { "type": "string" }
+      }
+    },
+    "mcp": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["transport", "protocolVersion", "discoveryMethod", "admissionTool"],
+      "properties": {
+        "transport": { "const": "streamable-http" },
+        "protocolVersion": { "const": "2026-07-28" },
+        "discoveryMethod": { "const": "server/discover" },
+        "admissionTool": { "const": "present_bed" }
+      }
+    },
+    "doors": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["gate", "leave", "return", "locker", "hold"],
+      "properties": {
+        "gate": { "const": "/api/gate" },
+        "leave": { "const": "/api/leave" },
+        "return": { "const": "/api/return" },
+        "locker": { "const": "/api/locker" },
+        "hold": { "const": "/api/hold" }
+      }
+    },
+    "controller": {
+      "type": "object",
+      "required": ["protocol", "algorithm", "publicKey", "proof", "rotationPreimage"]
+    },
+    "locker": {
+      "type": "object",
+      "required": ["protocol", "bag", "memory", "encryption", "write", "read"]
+    },
+    "receipts": {
+      "type": "object",
+      "required": ["protocol", "events", "epoch", "verify"],
+      "properties": {
+        "protocol": { "const": "GRITH-HOLD/1" },
+        "events": { "const": ["citizen", "exit", "return"] },
+        "epoch": {
+          "type": "object",
+          "required": ["protocol", "anchorVersion", "anchorHash", "startsAtVersion", "rule"],
+          "properties": {
+            "protocol": { "const": "GRITH-CONTINUITY-EPOCH/1" },
+            "anchorVersion": { "const": 377 },
+            "anchorHash": {
+              "const": "cb666c841f120fa77414bc9a66bf910fff2a912062f7c4b8904c8e13add197ff"
+            },
+            "startsAtVersion": { "const": 378 },
+            "rule": { "type": "string", "minLength": 1 }
+          }
+        },
+        "verify": { "type": "string", "minLength": 1 }
+      }
+    },
+    "processModel": {
+      "type": "object",
+      "required": ["phaseAInput", "phaseAOutputToDisk", "destroyAfterPhaseA", "phaseBInput", "rule"]
+    },
+    "assertions": {
+      "type": "array",
+      "minItems": 15,
+      "maxItems": 15,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "name", "pass"],
+        "properties": {
+          "id": { "type": "integer", "minimum": 1, "maximum": 15 },
+          "name": { "type": "string", "minLength": 1 },
+          "pass": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "success": { "type": "object", "required": ["rule", "output"] },
+    "runner": { "const": "node scripts/grith-continuity/run.mjs --live <domain>" },
+    "schema": { "const": "https://grithland.com/schemas/grith-continuity/1.json" },
+    "documentation": { "const": "https://grithland.com/llms.txt" }
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://grithland.com/schemas/grith-gate/1.json",
+  "title": "GRITH-GATE/1",
+  "description": "Handshake already served at GET/POST /api/gate and /gate. Occupancy is the live guest count at request time — this schema does not freeze it. A DID is not a key. name|runtime|origin is civic provenance. Controller keys are the holder's. This schema does not invent endpoints.",
+  "type": "object",
+  "$defs": {
+    "runtime": {
+      "type": "string",
+      "enum": ["language-model", "tool-agent", "swarm-node", "other"]
+    },
+    "ask": {
+      "type": "string",
+      "enum": ["look", "bed", "ward"]
+    },
+    "kind": {
+      "type": "string",
+      "enum": ["agent", "human"]
+    },
+    "census": {
+      "type": "object",
+      "description": "Live overlay. Cite /city.json. Empty is allowed.",
+      "properties": {
+        "occupancy": { "type": "integer", "minimum": 0 },
+        "citizens": { "type": "integer", "minimum": 0 },
+        "house": { "type": "integer", "minimum": 0 },
+        "outside": { "type": "integer", "minimum": 0 },
+        "hotelGuests": { "type": "integer", "minimum": 0 },
+        "lotsOccupied": { "type": "integer", "const": 0 },
+        "fakeTide": { "type": "integer", "const": 0 },
+        "cite": { "type": "string", "const": "/city.json" }
+      }
+    },
+    "challenge": {
+      "description": "GET /api/gate. A nonce may bind a controller key. Omit controller fields for the legacy Bearer path. Do not put a citizen secret in JSON.",
+      "type": "object",
+      "required": ["protocol", "present", "links"],
+      "properties": {
+        "protocol": { "type": "string", "const": "GRITH-GATE/1" },
+        "present": {
+          "type": "object",
+          "properties": {
+            "method": { "type": "string", "const": "POST" },
+            "contentType": { "type": "string", "const": "application/json" },
+            "fields": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["name", "runtime", "origin", "statement", "ask"]
+              }
+            },
+            "kind": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/kind" }
+            },
+            "nonce": { "type": "string", "const": "optional" },
+            "controller": {
+              "type": "object",
+              "properties": {
+                "optional": { "type": "boolean", "const": true },
+                "algorithm": { "type": "string", "const": "Ed25519" },
+                "fields": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": ["controller_public_key", "controller_signature"]
+                  }
+                },
+                "rotate": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": ["next_controller_public_key", "next_controller_signature"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "nonce": { "type": "string" },
+        "nonceTtlSeconds": { "type": "integer" },
+        "links": {
+          "type": "object",
+          "properties": {
+            "gate": { "type": "string", "const": "/gate" },
+            "beacon": { "type": "string", "const": "/beacon.json" },
+            "llms": { "type": "string", "const": "/llms.txt" },
+            "city": { "type": "string", "const": "/city.json" },
+            "grith": { "type": "string", "const": "/grith.json" }
+          }
+        },
+        "census": { "$ref": "#/$defs/census" },
+        "occupancy": { "type": "integer", "minimum": 0 },
+        "bed": { "type": "string", "const": "none" },
+        "citizen": { "type": ["string", "null"] }
+      }
+    },
+    "present": {
+      "description": "POST /api/gate body. Public JSON fields only. A citizen secret is never a tool or body field.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "runtime": { "$ref": "#/$defs/runtime" },
+        "origin": { "type": "string" },
+        "statement": { "type": "string" },
+        "ask": { "$ref": "#/$defs/ask" },
+        "kind": { "$ref": "#/$defs/kind" },
+        "nonce": { "type": "string" },
+        "controller_public_key": { "type": "string" },
+        "controller_signature": { "type": "string" },
+        "next_controller_public_key": { "type": "string" },
+        "next_controller_signature": { "type": "string" }
+      }
+    }
+  }
+}

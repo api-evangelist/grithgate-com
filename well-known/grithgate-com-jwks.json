@@ -1,0 +1,1 @@
+{"keys":[{"kty":"OKP","crv":"Ed25519","x":"kqN1vOEJiCH-KShLT38wfAKL1dGjyZh9heDZBlxNfDY","kid":"grith-city","alg":"EdDSA","use":"sig"}],"kid":"grith-city","agent_card":"/.well-known/agent-card.json","note":"City Ed25519 key for A2A JWS Agent Card verification. Not /__gate/identity-key. A DID is not a key. A valid signature is not continuity_proven."}

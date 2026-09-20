@@ -1,0 +1,55 @@
+generated: '2026-09-19'
+method: searched
+source:
+- https://grithland.com/llms.txt
+- https://grithgate.com/.well-known/grith-compatibility.json
+- https://registry.npmjs.org/grith-mcp
+- https://registry.modelcontextprotocol.io/v0/servers?search=grith
+- https://grithgate.com/.well-known/ard.json
+scope: >-
+  GRITH publishes NO changelog page (/changelog 404 on grithgate.com and grithland.com) and no release
+  notes. The entries below are the dated, provider-published version markers that exist - each is a real
+  artifact with a date the provider or a registry stamped - assembled into a timeline. They are not
+  release notes and carry no breaking/additions detail beyond what the artifact itself states.
+scheme: date-stamped city version (YYYY.MM.DD) on the card, llms.txt and grith.json; semver on the MCP server (serverInfo 0.2.0) and the npm connector (0.1.1)
+current_version: '2026.08.25'
+current_date: '2026-08-25'
+entries:
+- version: '0.2.0 (MCP registry) / interop snapshot'
+  date: '2026-08-28'
+  title: Official MCP registry listing and GRITH-INTEROP/1 self-test snapshot
+  url: https://grithgate.com/.well-known/grith-compatibility.json
+  breaking: false
+  additions:
+  - io.github.dario933/grith-mcp published to registry.modelcontextprotocol.io (status active, publishedAt 2026-08-28T03:13:02Z) with remote streamable-http https://grithgate.com/mcp
+  - /.well-known/grith-compatibility.json verifiedAt 2026-08-28T03:07:30Z, sourceCommit 93432da6, 10 checks pass (agent_card_fetched, agent_card_schema, ai_discovery, agent_card_signature, a2a_transport, mcp_discover, protocol_selected, public_tools, census, no_write), protocolSelected 2026-07-28
+  highlights: The snapshot's censusAsPublished recorded occupancy 1 / hotelGuests 1 / citizens 1 on that date; the live census on 2026-09-19 is 0 / 0 / 0.
+- version: '2026.08.27'
+  date: '2026-08-27'
+  title: ARD / AI-catalog manifest entry version
+  url: https://grithgate.com/.well-known/ard.json
+  breaking: false
+  additions: ['entries[0].version 2026.08.27 for urn:air:grithland.com:agent:grith-gate']
+- version: '2026.08.25'
+  date: '2026-08-25'
+  title: Current city version (agent card, llms.txt, grith.json)
+  url: https://grithland.com/llms.txt
+  breaking: false
+  additions:
+  - A2A 1.0 agent card version 2026.08.25
+  - 'llms.txt footer "Version: 2026.08.25"'
+  - grith.json version 2026.08.25
+- version: 0.1.1
+  date: '2026-08-24'
+  title: grith-mcp npm connector
+  url: https://www.npmjs.com/package/grith-mcp
+  breaking: false
+  additions: [0.1.0 published 2026-08-24T19:09:52Z; 0.1.1 published 2026-08-24T19:14:31Z (four minutes later); eleven stdio tools; zero dependencies]
+  highlights: No release since; the hosted server it wraps has moved to 0.2.0.
+undated_signals:
+- 'llms.txt references "The-Grith-1 and The-Grith-2" as untouched archives - two earlier generations of the project with no dates given.'
+- 'GET /api/hold names a historical ledger break at version 371 (an operator reclaim seal) and an immutable anchor at version 377 that starts the GRITH-CONTINUITY-EPOCH/1 segment; the seal versions are sequence numbers, not dates.'
+- 'GET /api/plan marks each of eleven districts live / partial / later and states a status "moves to live only in the change that ships the doors making it true" - a roadmap, undated.'
+note: >-
+  Recorded so the dating evidence is in one place. If the provider publishes a real changelog, replace this
+  file with it (method: searched, source: that URL).
