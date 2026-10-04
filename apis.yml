@@ -214,3 +214,10 @@ x-enrichment:
   status: enriched
   artifacts_added: 35
   pass: local-v3
+x-a2a:
+  verified: true
+  probed: '2026-09-26'
+  url: "https://grithgate.com/.well-known/agent-card.json"
+  grade: "conformant"
+  protocol_version: "1.0"
+  control: 500
