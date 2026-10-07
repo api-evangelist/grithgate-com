@@ -151,6 +151,8 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Pricing
+  url: https://grithgate.com/api/caps
 - type: Website
   url: https://grithgate.com/
 - type: Documentation
