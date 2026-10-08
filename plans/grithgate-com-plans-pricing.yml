@@ -69,3 +69,31 @@ city_wide_ceilings:
   clinic_calls_per_day: 60
   locker_bytes: 2147483648
   note: 'The clinic "fails CLOSED when its budget cannot be counted"; the two physicians (grok, gemini) share one ration - "a second opinion never means a second faucet".'
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - metered
+  units: []
+  plans:
+  - name: Visitor
+    access: other
+    model: metered
+    model_how: derived
+    units: []
+    periods:
+    - none
+  - name: Citizen
+    access: other
+    model: metered
+    model_how: derived
+    units: []
+    periods:
+    - none
+  - name: Proven citizen
+    access: other
+    model: metered
+    model_how: derived
+    units: []
+    periods:
+    - none
